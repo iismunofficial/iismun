@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IIS MUN 2026 | Diplomat's Arena</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Playfair+Display:ital,wght@0,700;1,400&display=swap"
+        rel="stylesheet">
+    <link rel="icon" type="image/png" href="Logo.png">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: '#2F3559',
+                        cream: '#F5EEDC',
+                        gold: '#C9B27C',
+                        charcoal: '#1F1F1F',
+                        slate: '#5A5A5A',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #F5EEDC;
+            color: #1F1F1F;
+            scroll-behavior: smooth;
+        }
+
+        .page-view {
+            display: none;
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+        .page-view.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .nav-link.active {
+            color: #2F3559;
+            border-bottom: 2px solid #C9B27C;
+        }
+
+        .dot-pattern {
+            background-image: radial-gradient(#2F3559 0.5px, transparent 0.5px);
+            background-size: 20px 20px;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex flex-col font-sans">
+
+    <!-- Header / Navigation -->
+    <nav class="fixed w-full z-50 bg-white/95 backdrop-blur-md border-b border-gold/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <!-- Brand -->
+                <div class="flex items-center gap-4 cursor-pointer" onclick="navigateTo('home')">
+                    <!-- School Logo -->
+                    <img src="SchoolLogo.png" alt="School Logo" class="h-10 w-10 object-contain"
+                        onerror="this.src='https://via.placeholder.com/150?text=School'">
+                    <div class="h-8 w-px bg-navy/20"></div>
+                    <!-- MUN Logo -->
+                    <img src="Logo.png" alt="IIS MUN Logo" class="h-12 w-12 object-contain"
+                        onerror="this.src='https://via.placeholder.com/150?text=MUN'">
+                    <div class="flex flex-col">
+                        <span class="font-black text-xl leading-tight tracking-tighter text-navy uppercase">IIS MUN
+                            '26</span>
+                        <span class="text-[9px] uppercase tracking-[0.2em] font-bold text-slate leading-none">Diplomat's
+                            Arena</span>
+                    </div>
+                </div>
+
+                <!-- Navigation Links -->
+                <div class="hidden md:flex items-center space-x-6 font-bold text-[10px] uppercase tracking-[0.2em]">
+                    <a href="javascript:void(0)" onclick="navigateTo('home')"
+                        class="nav-link active py-1 transition-all" data-page="home">Home</a>
+                    <a href="javascript:void(0)" onclick="navigateTo('about')"
+                        class="nav-link text-slate hover:text-navy py-1 transition-colors" data-page="about">About</a>
+                    <a href="javascript:void(0)" onclick="navigateTo('committees')"
+                        class="nav-link text-slate hover:text-navy py-1 transition-colors"
+                        data-page="committees">Committees</a>
+                    <a href="javascript:void(0)" onclick="navigateTo('team')"
+                        class="nav-link text-slate hover:text-navy py-1 transition-colors" data-page="team">Team</a>
+                    <a href="javascript:void(0)" onclick="navigateTo('resources')"
+                        class="nav-link text-slate hover:text-navy py-1 transition-colors"
+                        data-page="resources">Resources</a>
+                    <a href="javascript:void(0)" onclick="navigateTo('contact')"
+                        class="nav-link text-slate hover:text-navy py-1 transition-colors"
+                        data-page="contact">Contact</a>
+                </div>
+
+                <a href="https://forms.gle/HRMapTuW76ZJz6Ww9" target="_blank"
+                    class="hidden md:block bg-navy text-white px-8 py-2.5 rounded-full font-black text-[10px] uppercase tracking-widest hover:bg-navy/90 transition-all shadow-lg">
+                    Register Now
+                </a>
+
+                <!-- Mobile Trigger -->
+                <button id="mobile-btn" class="md:hidden text-navy p-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu"
+            class="hidden md:hidden bg-white border-t border-gold/20 p-6 space-y-4 font-bold text-xs uppercase tracking-widest">
+            <a href="javascript:void(0)" onclick="navigateTo('home')" class="block">Home</a>
+            <a href="javascript:void(0)" onclick="navigateTo('about')" class="block">About</a>
+            <a href="javascript:void(0)" onclick="navigateTo('committees')" class="block">Committees</a>
+            <a href="javascript:void(0)" onclick="navigateTo('team')" class="block">Team</a>
+            <a href="javascript:void(0)" onclick="navigateTo('resources')" class="block">Resources</a>
+            <a href="javascript:void(0)" onclick="navigateTo('contact')" class="block">Contact</a>
+            <a href="https://forms.gle/HRMapTuW76ZJz6Ww9" target="_blank"
+                class="block w-full text-center bg-navy text-white py-3 rounded-lg">Register (Phase 2) - ₹2200</a>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow pt-20">
+
+        <!-- HOME PAGE -->
+        <section id="page-home" class="page-view active">
+            <div class="relative pt-24 pb-12 md:pt-48 md:pb-20 flex flex-col items-center overflow-hidden">
+                <div class="absolute inset-0 opacity-[0.05] pointer-events-none dot-pattern"></div>
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative text-center">
+                    <div class="max-w-4xl mx-auto">
+                        <div
+                            class="inline-flex items-center space-x-2 px-4 py-1.5 mb-8 border border-gold/50 rounded-full bg-white/50 backdrop-blur-sm">
+                            <span class="w-2 h-2 rounded-full bg-gold animate-pulse"></span>
+                            <span class="text-navy font-black text-[9px] tracking-[0.3em] uppercase">18th – 19th April,
+                                2026</span>
+                        </div>
+                        <h1
+                            class="text-5xl md:text-[10rem] font-black text-navy leading-[0.8] tracking-tighter mb-8 uppercase">
+                            DIPLOMAT'S<br><span
+                                class="italic font-serif font-light text-gold opacity-80 lowercase">Arena</span>
+                        </h1>
+                        <p class="text-xl md:text-2xl text-slate mb-12 leading-relaxed font-medium max-w-2xl mx-auto">
+                            Representing various <span class="text-navy font-black">spots across the globe</span>
+                            through diplomacy, dialogue, and decisive leadership.
+                        </p>
+
+                        <div class="flex flex-col sm:flex-row justify-center gap-4 mb-20">
+                            <a href="https://forms.gle/HRMapTuW76ZJz6Ww9" target="_blank"
+                                class="px-12 py-5 bg-navy text-white rounded font-black text-xs uppercase tracking-widest hover:translate-y-[-2px] transition-all shadow-xl text-center">
+                                Join the Arena
+                            </a>
+                            <button onclick="navigateTo('committees')"
+                                class="px-12 py-5 border-2 border-navy text-navy rounded font-black text-xs uppercase tracking-widest hover:bg-navy hover:text-white transition-all text-center">
+                                Explore Forums
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Stats Bar Component -->
+                    <div class="max-w-5xl mx-auto mt-10">
+                        <div
+                            class="grid grid-cols-2 md:grid-cols-4 bg-white border border-navy rounded-[3rem] overflow-hidden shadow-2xl shadow-navy/5">
+                            <div class="p-8 text-center border-b md:border-b-0 border-r md:border-r border-navy/10">
+                                <p class="text-4xl font-black text-navy">04</p>
+                                <p class="text-[10px] text-slate font-black uppercase tracking-[0.2em] mt-1">Committees
+                                </p>
+                            </div>
+                            <div class="p-8 text-center border-b md:border-b-0 md:border-r border-navy/10">
+                                <p class="text-4xl font-black text-navy">₹30K</p>
+                                <p class="text-[10px] text-slate font-black uppercase tracking-[0.2em] mt-1">Prize Pool
+                                </p>
+                            </div>
+                            <div class="p-8 text-center border-r border-navy/10">
+                                <p class="text-4xl font-black text-navy">02</p>
+                                <p class="text-[10px] text-slate font-black uppercase tracking-[0.2em] mt-1">Event Days
+                                </p>
+                            </div>
+                            <div class="p-8 text-center">
+                                <p class="text-4xl font-black text-navy">₹2200</p>
+                                <p class="text-[10px] text-slate font-black uppercase tracking-[0.2em] mt-1">Phase 2 Fee
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features -->
+            <div class="bg-navy py-16 md:py-24 text-cream">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-3 gap-8 md:gap-16">
+                    <div class="space-y-4">
+                        <div class="w-12 h-1 bg-gold"></div>
+                        <h3 class="text-2xl font-serif italic font-bold">Diplomacy</h3>
+                        <p class="text-cream/70 text-sm leading-relaxed">Engagement in high-level simulations
+                            representing spots from every corner of the world.</p>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="w-12 h-1 bg-gold"></div>
+                        <h3 class="text-2xl font-serif italic font-bold">Dialogue</h3>
+                        <p class="text-cream/70 text-sm leading-relaxed">Sophisticated discourse aimed at solving the
+                            most pressing global and national agendas.</p>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="w-12 h-1 bg-gold"></div>
+                        <h3 class="text-2xl font-serif italic font-bold">Decision</h3>
+                        <p class="text-cream/70 text-sm leading-relaxed">Collaborative resolution building that mirrors
+                            the authentic United Nations framework.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABOUT PAGE -->
+        <section id="page-about" class="page-view py-24">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid lg:grid-cols-2 gap-10 md:gap-20 items-center">
+                    <div>
+                        <h2
+                            class="text-4xl md:text-5xl font-black text-navy uppercase tracking-tighter mb-8 leading-none">
+                            THE
+                            VISION</h2>
+                        <div class="prose prose-lg text-slate italic font-serif leading-relaxed mb-12">
+                            <p>At IIS MUN, we believe Model United Nations is more than speeches and blocs. It is about
+                                critical thinking, informed dialogue, and responsible leadership. Our vision is to
+                                provide a platform where students engage deeply with global issues, represent
+                                perspectives with integrity, and learn the value of diplomacy over dominance.
+
+                                We strive to make IIS MUN inclusive, intellectually challenging, and meaningful for
+                                every delegate. Whether it is a first-time participant or an experienced MUNer, we aim
+                                to foster confidence, clarity of thought, and respect for diverse viewpoints.
+
+                                IIS MUN is a space where ideas lead, voices matter, and future leaders are shaped
+                                through dialogue and action.</p>
+                        </div>
+                        <div class="flex items-center space-x-6">
+                            <div class="w-16 h-px bg-gold"></div>
+                            <div>
+                                <p class="font-black text-lg text-navy uppercase tracking-widest">Ms.Sakina Lakdawala
+                                </p>
+                                <p class="text-slate text-[10px] font-bold uppercase tracking-[0.2em]">Principal,
+                                    Innovative International School</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-12 shadow-2xl border-l-8 border-gold space-y-8">
+                        <h3 class="text-2xl font-black text-navy uppercase tracking-widest border-b pb-4">What is MUN?
+                        </h3>
+                        <p class="text-slate leading-relaxed font-medium">
+                            Model United Nations is an academic simulation where students represent different <span
+                                class="text-navy font-bold">spots across the globe</span> as diplomats. Delegates
+                            research, debate, and negotiate to find solutions to global complexities, fostering
+                            leadership and public speaking skills.
+                        </p>
+                        <ul class="space-y-4 text-sm font-bold text-navy uppercase tracking-widest">
+                            <li class="flex items-center space-x-3">
+                                <span class="text-gold">●</span> <span>Global Awareness</span>
+                            </li>
+                            <li class="flex items-center space-x-3">
+                                <span class="text-gold">●</span> <span>Diplomatic Research</span>
+                            </li>
+                            <li class="flex items-center space-x-3">
+                                <span class="text-gold">●</span> <span>Public Speaking Excellence</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- COMMITTEES PAGE -->
+        <section id="page-committees" class="page-view py-24">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-20">
+                    <h2 class="text-6xl font-black text-navy uppercase tracking-tighter mb-4">COMMITTEES</h2>
+                    <p class="text-slate font-bold uppercase tracking-[0.4em] text-xs">The Forums of Governance</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- UNSC -->
+                    <div
+                        class="bg-white p-10 border border-gold/20 hover:border-navy transition-all group shadow-sm flex flex-col h-full">
+                        <div class="flex justify-between items-start mb-6">
+                            <h3 class="text-3xl font-black text-navy serif italic">UNSC</h3>
+                            <span class="text-[9px] font-black text-gold uppercase tracking-widest">International</span>
+                        </div>
+                        <p class="text-slate text-sm leading-relaxed mb-8 flex-grow">United Nations Security Council:
+                            Responsible
+                            for maintaining international peace and security under Chapter V of the UN Charter, with
+                            powers including sanctions and peacekeeping.</p>
+                        <div class="pt-6 border-t border-gold/20 mb-4">
+                            <p class="text-[10px] font-black text-gold uppercase tracking-widest mb-2">Agenda</p>
+                            <p class="text-navy font-bold text-xs tracking-tight">Addressing the Escalation of
+                                Military Confrontations between the United States and the Islamic Republic of Iran and
+                                Its Impact on International Peace, Security, and Stability in the Middle East.</p>
+                        </div>
+                        <div class="h-1 w-0 group-hover:w-full bg-navy transition-all duration-500"></div>
+                    </div>
+                    <!-- Lok Sabha -->
+                    <div
+                        class="bg-white p-10 border border-gold/20 hover:border-navy transition-all group shadow-sm flex flex-col h-full">
+                        <div class="flex justify-between items-start mb-6">
+                            <h3 class="text-3xl font-black text-navy serif italic">LOK SABHA</h3>
+                            <span class="text-[9px] font-black text-gold uppercase tracking-widest">National</span>
+                        </div>
+                        <p class="text-slate text-sm leading-relaxed mb-8 flex-grow">House of People: Enacts national
+                            laws,
+                            controls public finances, and holds the Union Government accountable through rigorous
+                            parliamentary oversight.</p>
+                        <div class="pt-6 border-t border-gold/20 mb-4">
+                            <p class="text-[10px] font-black text-gold uppercase tracking-widest mb-2">Agenda</p>
+                            <p class="text-navy font-bold text-xs tracking-tight">Reviewing and Reforming
+                                India’s Electoral Laws and Democratic Processes to Enhance Transparency, Accountability,
+                                and Institutional Integrity.</p>
+                        </div>
+                        <div class="h-1 w-0 group-hover:w-full bg-navy transition-all duration-500"></div>
+                    </div>
+                    <!-- GLA -->
+                    <div
+                        class="bg-white p-10 border border-gold/20 hover:border-navy transition-all group shadow-sm flex flex-col h-full">
+                        <div class="flex justify-between items-start mb-6">
+                            <h3 class="text-3xl font-black text-navy serif italic">GLA</h3>
+                            <span class="text-[9px] font-black text-gold uppercase tracking-widest">State</span>
+                        </div>
+                        <p class="text-slate text-sm leading-relaxed mb-8 flex-grow">Gujarat Legislative Assembly:
+                            Legislates on
+                            state subjects, approves state budgets, and represents regional interests within the Indian
+                            constitutional framework.</p>
+                        <div class="pt-6 border-t border-gold/20 mb-4">
+                            <p class="text-[10px] font-black text-gold uppercase tracking-widest mb-2">Agenda</p>
+                            <p class="text-navy font-bold text-xs tracking-tight">Evaluating the progress of
+                                Gujarat's Development through the lens of infrastructure growth, advancements in
+                                education and implementation of the Uniform Civil Code.</p>
+                        </div>
+                        <div class="h-1 w-0 group-hover:w-full bg-navy transition-all duration-500"></div>
+                    </div>
+                    <!-- IP -->
+                    <div
+                        class="bg-white p-10 border border-gold/20 hover:border-navy transition-all group shadow-sm flex flex-col h-full">
+                        <div class="flex justify-between items-start mb-6">
+                            <h3 class="text-3xl font-black text-navy serif italic">INT. PRESS</h3>
+                            <span class="text-[9px] font-black text-gold uppercase tracking-widest">Journalism</span>
+                        </div>
+                        <p class="text-slate text-sm leading-relaxed mb-8 flex-grow">Documents proceedings, analyzes
+                            debates, and
+                            ensures transparency through accurate and fair responsible journalistic coverage of the
+                            conference.</p>
+                        <div class="pt-6 border-t border-gold/20 mb-4">
+                            <p class="text-[10px] font-black text-gold uppercase tracking-widest mb-2">Roles</p>
+                            <p class="text-navy font-bold text-xs tracking-tight">Journalist and Photographer
+                            </p>
+                        </div>
+                        <div class="h-1 w-0 group-hover:w-full bg-navy transition-all duration-500"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TEAM PAGE -->
+        <section id="page-team" class="page-view py-24 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h2 class="text-5xl font-black text-navy uppercase tracking-tighter mb-20">THE TEAM</h2>
+
+                <!-- Secretariat -->
+                <div class="mb-32">
+                    <p
+                        class="text-[10px] font-black text-slate uppercase tracking-[0.5em] mb-12 italic border-b pb-4 max-w-xs mx-auto">
+                        The Secretariat</p>
+                    <div class="grid md:grid-cols-2 gap-12 max-w-4xl mx-auto">
+                        <div
+                            class="p-12 border-2 border-navy rounded-3xl group hover:bg-navy hover:text-white transition-all">
+                            <p class="text-[9px] font-black text-gold uppercase tracking-widest mb-4">Secretary General
+                            </p>
+                            <h3 class="text-5xl font-black italic serif">Jeet Changela</h3>
+                        </div>
+                        <div
+                            class="p-12 border-2 border-navy rounded-3xl group hover:bg-navy hover:text-white transition-all">
+                            <p class="text-[9px] font-black text-gold uppercase tracking-widest mb-4">Director General
+                            </p>
+                            <h3 class="text-5xl font-black italic serif">Vedant Patel</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Organizing Committee -->
+                <div class="max-w-7xl mx-auto mb-32">
+                    <p class="text-[10px] font-black text-slate uppercase tracking-[0.5em] mb-12">Core Organizing
+                        Committee
+                    </p>
+
+                    <!-- Core OC -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                        <div class="bg-cream p-8 rounded-xl border border-gold/30">
+                            <p class="text-[8px] font-black text-slate uppercase mb-2">Event Coordinators</p>
+                            <h4 class="font-bold text-navy text-sm">Hirak Batavia &<br>Mishri Hindocha</h4>
+                        </div>
+                        <div class="bg-cream p-8 rounded-xl border border-gold/30">
+                            <p class="text-[8px] font-black text-slate uppercase mb-2">Director of Sponsorships &
+                                Marketing</p>
+                            <h4 class="font-bold text-navy text-sm">Krishn Savaliya</h4>
+                        </div>
+                        <div class="bg-cream p-8 rounded-xl border border-gold/30">
+                            <p class="text-[8px] font-black text-slate uppercase mb-2">Chief of Staff</p>
+                            <h4 class="font-bold text-navy text-sm">Tirth Doshi</h4>
+                        </div>
+                        <div class="bg-cream p-8 rounded-xl border border-gold/30">
+                            <p class="text-[8px] font-black text-slate uppercase mb-2">Director of Substance & Creative
+                                Affairs</p>
+                            <h4 class="font-bold text-navy text-sm">Dhyanesh Ambasana</h4>
+                        </div>
+                        <div class="bg-cream p-8 rounded-xl border border-gold/30">
+                            <p class="text-[8px] font-black text-slate uppercase mb-2">Director of Research & Operations
+                            </p>
+                            <h4 class="font-bold text-navy text-sm">Dhiyan Udeshi</h4>
+                        </div>
+                    </div>
+
+                    <!-- Specialized Roles -->
+                    <!-- Under Director General -->
+                    <div class="mb-12">
+                        <p
+                            class="text-[9px] font-black text-slate uppercase tracking-[0.3em] mb-6 border-b border-gold/20 pb-2 inline-block">
+                            Under Director General</p>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+                            <div class="p-4 bg-white border border-navy/10 rounded-lg">
+                                <p class="text-[7px] font-black text-gold uppercase mb-1">UDG Logistics</p>
+                                <p class="text-[10px] font-bold text-navy">Jainil Rajdev</p>
+                            </div>
+                            <div class="p-4 bg-white border border-navy/10 rounded-lg">
+                                <p class="text-[7px] font-black text-gold uppercase mb-1">UDG Conference Operation</p>
+                                <p class="text-[10px] font-bold text-navy">Arya Arora</p>
+                            </div>
+                            <div class="p-4 bg-white border border-navy/10 rounded-lg">
+                                <p class="text-[7px] font-black text-gold uppercase mb-1">UDG Hospitality</p>
+                                <p class="text-[10px] font-bold text-navy">Vraj Ashiyani</p>
+                            </div>
+                            <div class="p-4 bg-white border border-navy/10 rounded-lg">
+                                <p class="text-[7px] font-black text-gold uppercase mb-1">UDG Social Media & Public
+                                    Relations</p>
+                                <p class="text-[10px] font-bold text-navy">Maan Sagpariya</p>
+                            </div>
+                            <div class="p-4 bg-white border border-navy/10 rounded-lg">
+                                <p class="text-[7px] font-black text-gold uppercase mb-1">OC Head</p>
+                                <p class="text-[10px] font-bold text-navy">Darsh Ganatra</p>
+                            </div>
+                            <div class="p-4 bg-white border border-navy/10 rounded-lg">
+                                <p class="text-[7px] font-black text-gold uppercase mb-1">Head of Photography</p>
+                                <p class="text-[10px] font-bold text-navy">Rudrarajsinh Vala</p>
+                            </div>
+                            <div class="p-4 bg-white border border-navy/10 rounded-lg">
+                                <p class="text-[7px] font-black text-gold uppercase mb-1">Deputy Head of Photography</p>
+                                <p class="text-[10px] font-bold text-navy">Vaividhya Bhakhar</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Under Secretary General -->
+                    <div>
+                        <p
+                            class="text-[9px] font-black text-slate uppercase tracking-[0.3em] mb-6 border-b border-gold/20 pb-2 inline-block">
+                            Under Secretary General</p>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+                            <div class="p-4 bg-white border border-navy/10 rounded-lg">
+                                <p class="text-[7px] font-black text-gold uppercase mb-1">USG Committee Affairs</p>
+                                <p class="text-[10px] font-bold text-navy">Kaulav Daftary</p>
+                            </div>
+                            <div class="p-4 bg-white border border-navy/10 rounded-lg">
+                                <p class="text-[7px] font-black text-gold uppercase mb-1">USG External Affairs</p>
+                                <p class="text-[10px] font-bold text-navy">Neel Odedara</p>
+                            </div>
+                            <div class="p-4 bg-white border border-navy/10 rounded-lg">
+                                <p class="text-[7px] font-black text-gold uppercase mb-1">USG Internal Affairs</p>
+                                <p class="text-[10px] font-bold text-navy">Dhyana Ladani</p>
+                            </div>
+                            <div class="p-4 bg-white border border-navy/10 rounded-lg">
+                                <p class="text-[7px] font-black text-gold uppercase mb-1">USG Internal Affairs</p>
+                                <p class="text-[10px] font-bold text-navy">Preena Parmar</p>
+                            </div>
+                            <div class="p-4 bg-white border border-navy/10 rounded-lg">
+                                <p class="text-[7px] font-black text-gold uppercase mb-1">USG Internal Affairs</p>
+                                <p class="text-[10px] font-bold text-navy">Jisha Kalyani</p>
+                            </div>
+                            <div class="p-4 bg-white border border-navy/10 rounded-lg">
+                                <p class="text-[7px] font-black text-gold uppercase mb-1">USG Protocol</p>
+                                <p class="text-[10px] font-bold text-navy">Namra Gotecha</p>
+                            </div>
+                            <div class="p-4 bg-white border border-navy/10 rounded-lg">
+                                <p class="text-[7px] font-black text-gold uppercase mb-1">USG Outreach</p>
+                                <p class="text-[10px] font-bold text-navy italic opacity-70">TBA</p>
+                            </div>
+                            <div class="p-4 bg-white border border-navy/10 rounded-lg">
+                                <p class="text-[7px] font-black text-gold uppercase mb-1">USG Delegate Affairs</p>
+                                <p class="text-[10px] font-bold text-navy">Jainil Faldu</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Executive Board -->
+                <div class="mb-32">
+                    <p class="text-[10px] font-black text-slate uppercase tracking-[0.5em] mb-12">The Executive
+                        Board
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-left">
+                        <div class="bg-cream/40 p-8 rounded-2xl border border-navy/10 h-full">
+                            <span
+                                class="text-[8px] font-black bg-navy text-white px-3 py-1 rounded-full uppercase tracking-widest">UNSC</span>
+                            <div class="mt-6 space-y-4">
+                                <div>
+                                    <p class="text-[8px] font-black text-slate uppercase">Chair</p>
+                                    <p class="font-bold text-navy">Reyansh Punjabi</p>
+                                </div>
+                                <div>
+                                    <p class="text-[8px] font-black text-slate uppercase">Vice Chair</p>
+                                    <p class="font-bold text-navy">Yuvraj Dadhania</p>
+                                </div>
+                                <div>
+                                    <p class="text-[8px] font-black text-slate uppercase">Rapporteur</p>
+                                    <p class="font-bold text-navy">Pratham Jogia</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-cream/40 p-8 rounded-2xl border border-navy/10 h-full">
+                            <span
+                                class="text-[8px] font-black bg-navy text-white px-3 py-1 rounded-full uppercase tracking-widest">Lok
+                                Sabha</span>
+                            <div class="mt-6 space-y-4">
+                                <div>
+                                    <p class="text-[8px] font-black text-slate uppercase">Speaker</p>
+                                    <p class="font-bold text-navy">Dweep Khimani</p>
+                                </div>
+                                <div>
+                                    <p class="text-[8px] font-black text-slate uppercase">Deputy Speaker</p>
+                                    <p class="font-bold text-navy">Prince Vaja</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-cream/40 p-8 rounded-2xl border border-navy/10 h-full">
+                            <span
+                                class="text-[8px] font-black bg-navy text-white px-3 py-1 rounded-full uppercase tracking-widest">GLA</span>
+                            <div class="mt-6 space-y-4">
+                                <div>
+                                    <p class="text-[8px] font-black text-slate uppercase">Speaker</p>
+                                    <p class="font-bold text-navy">Shyam Dattani</p>
+                                </div>
+                                <div>
+                                    <p class="text-[8px] font-black text-slate uppercase">Deputy Speaker</p>
+                                    <p class="font-bold text-navy">Dharma Parsana</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-cream/40 p-8 rounded-2xl border border-navy/10 h-full">
+                            <span
+                                class="text-[8px] font-black bg-navy text-white px-3 py-1 rounded-full uppercase tracking-widest">Int.
+                                Press</span>
+                            <div class="mt-6 space-y-4">
+                                <div>
+                                    <p class="text-[8px] font-black text-slate uppercase">IP Chairperson</p>
+                                    <p class="font-bold text-navy">Nanak Ram Ilm</p>
+                                </div>
+                                <div>
+                                    <p class="text-[8px] font-black text-slate uppercase">IP Vice Chairperson</p>
+                                    <p class="font-bold text-navy">Aashvi Shah</p>
+                                </div>
+                            </div>
+                        </div>
+        </section>
+
+        <!-- RESOURCES PAGE -->
+        <section id="page-resources" class="page-view py-24">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-20">
+                    <h2 class="text-5xl font-black text-navy uppercase tracking-tighter mb-4">RESOURCES</h2>
+                    <p class="text-slate font-bold uppercase tracking-[0.4em] text-xs">Delegate Preparation Hub</p>
+                </div>
+
+                <!-- Resources Grid -->
+                <div class="grid md:grid-cols-3 gap-8 mb-20">
+                    <!-- Study Guides -->
+                    <div
+                        class="bg-white p-8 border border-gold/20 rounded-2xl shadow-lg hover:-translate-y-1 transition-transform duration-300">
+                        <div class="w-12 h-12 bg-navy/5 rounded-full flex items-center justify-center mb-6 text-navy">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" class="w-6 h-6">
+                                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-black text-navy uppercase tracking-tight mb-2">Study Guides</h3>
+                        <p class="text-slate text-xs mb-6">Comprehensive guides for each committee.</p>
+                        <a href="https://drive.google.com/drive/folders/1QCQvLE3UW-9MrCsN6_aJEwp5TOSWtoUn?usp=sharing"
+                            class="inline-flex items-center text-[10px] font-black text-gold uppercase tracking-widest hover:text-navy transition-colors">
+                            Access Drive
+                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                            </svg>
+                        </a>
+                    </div>
+
+                    <!-- Matrix -->
+                    <div
+                        class="bg-white p-8 border border-gold/20 rounded-2xl shadow-lg hover:-translate-y-1 transition-transform duration-300">
+                        <div class="w-12 h-12 bg-navy/5 rounded-full flex items-center justify-center mb-6 text-navy">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" class="w-6 h-6">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="3" y1="9" x2="21" y2="9"></line>
+                                <line x1="9" y1="21" x2="9" y2="9"></line>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-black text-navy uppercase tracking-tight mb-2">Country Matrix</h3>
+                        <p class="text-slate text-xs mb-6">Country allocations and committee matrix.</p>
+                        <a href="https://drive.google.com/drive/folders/1Zuazse3Njdi6EQOQ_wUTVROy8hwpeDoS?usp=sharing"
+                            class="inline-flex items-center text-[10px] font-black text-gold uppercase tracking-widest hover:text-navy transition-colors">
+                            View Matrix
+                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                            </svg>
+                        </a>
+                    </div>
+
+                    <!-- MUN Brochure -->
+                    <div
+                        class="bg-white p-8 border border-gold/20 rounded-2xl shadow-lg hover:-translate-y-1 transition-transform duration-300">
+                        <div class="w-12 h-12 bg-navy/5 rounded-full flex items-center justify-center mb-6 text-navy">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" class="w-6 h-6">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10 9 9 9 8 9"></polyline>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-black text-navy uppercase tracking-tight mb-2">MUN Brochure</h3>
+                        <p class="text-slate text-xs mb-6">Official brochure with event details.</p>
+                        <a href="https://drive.google.com/file/d/1Vl5OVNpwMTIcsQ3i7BS0glshkj84P2Ct/view?usp=sharing"
+                            class="inline-flex items-center text-[10px] font-black text-gold uppercase tracking-widest hover:text-navy transition-colors">
+                            Download
+                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                            </svg>
+                        </a>
+                    </div>
+
+                    <!-- Other Documents -->
+                    <div
+                        class="bg-white p-8 border border-gold/20 rounded-2xl shadow-lg hover:-translate-y-1 transition-transform duration-300">
+                        <div class="w-12 h-12 bg-navy/5 rounded-full flex items-center justify-center mb-6 text-navy">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" class="w-6 h-6">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="8" x2="12" y2="16"></line>
+                                <line x1="8" y1="12" x2="16" y2="12"></line>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-black text-navy uppercase tracking-tight mb-2">More Resources</h3>
+                        <p class="text-slate text-xs mb-6">Additional documents and preparation material.</p>
+                        <a href="https://drive.google.com/drive/folders/1FU8o95lYzdHgcCV_TZ83S_UEzPkM3t69?usp=sharing"
+                            class="inline-flex items-center text-[10px] font-black text-gold uppercase tracking-widest hover:text-navy transition-colors">
+                            Browse Folder
+                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+        </section>
+
+        <!-- CONTACT PAGE -->
+        <section id="page-contact" class="page-view py-24">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-16">
+                <div class="lg:w-1/2">
+                    <h2 class="text-5xl md:text-7xl font-black text-navy leading-none tracking-tighter mb-8 uppercase">
+                        JOIN
+                        THE<br>ARENA</h2>
+                    <p class="text-xl text-slate font-medium mb-12">Step into the halls of diplomacy. Delegate
+                        registration (Phase 2) is open at <span class="text-navy font-bold underline">₹2200</span>.</p>
+
+                    <div class="space-y-12">
+                        <div class="flex items-center space-x-6">
+                            <div class="w-12 h-12 bg-navy text-white flex items-center justify-center rounded">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2">
+                                    <path
+                                        d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                                    </path>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-black text-gold uppercase tracking-widest mb-1">
+                                    Contact
+                                    Details</p>
+                                <p class="font-bold text-navy">+91 63562 09090 • +91 96878 29641</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-6">
+                            <div class="w-12 h-12 bg-navy text-white flex items-center justify-center rounded">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-black text-gold uppercase tracking-widest mb-1">
+                                    Instagram
+                                    Handle</p>
+                                <p class="font-bold text-navy">@iis_.mun</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:w-1/2 bg-white p-8 md:p-12 border border-gold/20 shadow-2xl">
+                    <form id="contact-form" onsubmit="submitToGoogleSheets(event)" class="space-y-6">
+                        <div>
+                            <label class="block text-[10px] font-black text-slate uppercase tracking-widest mb-2">Full
+                                Name</label>
+                            <input type="text" name="name" required
+                                class="w-full border-b-2 border-cream focus:border-gold outline-none py-3 px-2 text-sm bg-cream/30">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-black text-slate uppercase tracking-widest mb-2">E-mail
+                                Address</label>
+                            <input type="email" name="email" required
+                                class="w-full border-b-2 border-cream focus:border-gold outline-none py-3 px-2 text-sm bg-cream/30">
+                        </div>
+                        <div>
+                            <label
+                                class="block text-[10px] font-black text-slate uppercase tracking-widest mb-2">Message</label>
+                            <textarea rows="4" name="message" required
+                                class="w-full border-b-2 border-cream focus:border-gold outline-none py-3 px-2 text-sm bg-cream/30"></textarea>
+                        </div>
+                        <button type="submit" id="submit-btn"
+                            class="w-full bg-navy text-white py-5 font-black uppercase tracking-widest text-[10px] hover:bg-navy/90 transition-all">Submit
+                            Inquiry</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white py-16 border-t-8 border-navy">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-3 gap-12">
+            <div>
+                <div class="flex items-center space-x-3 mb-6">
+                    <div class="w-10 h-10 bg-navy flex items-center justify-center rounded">
+                        <span class="text-white font-black text-[10px] leading-tight text-center">IIS<br>MUN</span>
+                    </div>
+                    <span class="font-black text-xl text-navy tracking-tighter">IIS MUN '26</span>
+                </div>
+                <p class="text-slate text-[10px] font-bold leading-relaxed uppercase tracking-widest">Innovative
+                    International School, Rajkot. Simulating governance from spots across the globe.</p>
+            </div>
+
+            <div class="space-y-4">
+                <p class="text-[10px] font-black text-gold uppercase tracking-widest">The Arena</p>
+                <div class="space-y-2 text-xs font-bold text-slate">
+                    <p>18th – 19th April, 2026</p>
+                    <p>Innovative International School</p>
+                    <p>Rajkot, Gujarat</p>
+                </div>
+            </div>
+
+            <div class="text-right space-y-4 hidden md:block">
+                <p class="text-[10px] font-black text-gold uppercase tracking-widest">Secure Your Place</p>
+                <p class="text-navy font-black uppercase text-xs tracking-widest">Registration Status: OPEN</p>
+            </div>
+        </div>
+        <div class="mt-16 text-center text-[10px] font-black text-slate/30 uppercase tracking-[0.4em]">
+            © 2026 Innovative International School • Rajkot
+        </div>
+    </footer>
+
+    <script>
+        // Multi-page Router Logic
+        function navigateTo(pageId) {
+            const views = document.querySelectorAll('.page-view');
+            views.forEach(view => view.classList.remove('active'));
+            const targetView = document.getElementById('page-' + pageId);
+            if (targetView) targetView.classList.add('active');
+            const links = document.querySelectorAll('.nav-link');
+            links.forEach(link => {
+                link.classList.remove('active', 'text-navy', 'border-b-2', 'border-gold');
+                link.classList.add('text-slate');
+                if (link.getAttribute('data-page') === pageId) {
+                    link.classList.add('active', 'text-navy', 'border-b-2', 'border-gold');
+                    link.classList.remove('text-slate');
+                }
+            });
+            window.scrollTo(0, 0);
+            document.getElementById('mobile-menu').classList.add('hidden');
+        }
+
+
+
+        // Mobile Nav Trigger
+        document.getElementById('mobile-btn').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+
+        // Contact Form Submission
+        function submitToGoogleSheets(e) {
+            e.preventDefault();
+            const form = document.getElementById('contact-form');
+            const btn = document.getElementById('submit-btn');
+            const originalBtnText = btn.innerHTML;
+
+            // 1. Get the Web App URL from the user
+            // TODO: REPLACE THIS LINK WITH YOUR OWN DEPLOYED GOOGLE APPS SCRIPT URL
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbyKc2jlE_vGXzgalhvTzVetj8anCQbIgkzKN0EUZInR9tMyOO4xeYPVL7cYx_vcajVMAw/exec';
+
+            btn.disabled = true;
+            btn.innerHTML = 'Sending...';
+
+            fetch(scriptURL, {
+                method: 'POST',
+                body: new FormData(form)
+            })
+                .then(response => {
+                    alert("Success! Your message has been sent.");
+                    form.reset();
+                })
+                .catch(error => {
+                    console.error('Error!', error.message);
+                    alert("Error! Could not send message.");
+                })
+                .finally(() => {
+                    btn.disabled = false;
+                    btn.innerHTML = originalBtnText;
+                });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => navigateTo('home'));
+    </script>
+</body>
+
+</html>
